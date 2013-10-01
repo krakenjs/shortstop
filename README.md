@@ -103,15 +103,18 @@ data = resolver.resolve(json);
 
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
 
-```json1
+
+```js
+// json1
 {
     "key": "path:foo/baz.key"
 }
 ```
 
-```json2
+```js
+// json2
 {
-    "key": "path:foo/baz.key"
+    "key": "path:foo/bar.key"
 }
 ```
 
@@ -145,6 +148,6 @@ unuse();
 data = resolver.resolve(json2);
 
 // {
-//     "key": "path:foo/baz.key"
+//     "key": "path:foo/bar.key"
 // }
 ```
