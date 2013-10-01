@@ -1,0 +1,7 @@
+{
+    "foo": "bar",
+    "foobar": "foo:foo",
+    "file":   "file:",
+    "method": "method:fixtures/demo=>method",
+    "buffer": "buffer:SGVsbG8sIHdvcmxkIQ=="
+}
