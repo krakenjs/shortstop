@@ -100,7 +100,7 @@ describe('shortstop', function () {
             resolver = shortstop.create();
             out = resolver.resolve(data);
 
-            assert.strictEqual(data, out);
+            assert.notStrictEqual(data, out);
             assert.strictEqual(data.foo, 'bar');
         });
 
@@ -129,13 +129,13 @@ describe('shortstop', function () {
             });
 
             out = resolver.resolve(data);
-            assert.strictEqual(data, out);
-            assert.strictEqual(data.foo, 'bar');
-            assert.strictEqual(data.foobar, 'foo bar');
-            assert.isString(data.file);
-            assert.isFunction(data.method);
-            assert(Buffer.isBuffer(data.buffer));
-            assert.strictEqual(data.buffer.toString(), 'Hello, world!');
+            assert.notStrictEqual(data, out);
+            assert.strictEqual(out.foo, 'bar');
+            assert.strictEqual(out.foobar, 'foo bar');
+            assert.isString(out.file);
+            assert.isFunction(out.method);
+            assert(Buffer.isBuffer(out.buffer));
+            assert.strictEqual(out.buffer.toString(), 'Hello, world!');
         });
 
 
@@ -165,28 +165,28 @@ describe('shortstop', function () {
             });
 
             out = resolver.resolve(data);
-            assert.strictEqual(data, out);
-            assert.strictEqual(data.foo, 'bar');
-            assert.strictEqual(data.foobar, false);
+            assert.notStrictEqual(data, out);
+            assert.strictEqual(out.foo, 'bar');
+            assert.strictEqual(out.foobar, false);
 
-            assert.isObject(data.file);
-            assert.strictEqual(data.file.name, 'myfile');
-            assert.strictEqual(data.file.value, 'myfile bar');
+            assert.isObject(out.file);
+            assert.strictEqual(out.file.name, 'myfile');
+            assert.strictEqual(out.file.value, 'myfile bar');
 
-            assert.isObject(data.test);
-            assert.strictEqual(data.test.foo, 0);
-            assert.strictEqual(data.test.bar, null);
+            assert.isObject(out.test);
+            assert.strictEqual(out.test.foo, 0);
+            assert.strictEqual(out.test.bar, null);
 
-            assert.isArray(data.methods);
-            assert.strictEqual(data.methods[0], '1 bar');
-            assert.strictEqual(data.methods[1], '2 bar');
-            assert.strictEqual(data.methods[2], '3');
-            assert.strictEqual(data.methods[3], '4 bar');
-            assert.strictEqual(data.methods[4], 5);
+            assert.isArray(out.methods);
+            assert.strictEqual(out.methods[0], '1 bar');
+            assert.strictEqual(out.methods[1], '2 bar');
+            assert.strictEqual(out.methods[2], '3');
+            assert.strictEqual(out.methods[3], '4 bar');
+            assert.strictEqual(out.methods[4], 5);
 
-            assert.isArray(data.buffer);
-            assert.isObject(data.buffer[0]);
-            assert.strictEqual(data.buffer[0].file, 'anotherfile bar');
+            assert.isArray(out.buffer);
+            assert.isObject(out.buffer[0]);
+            assert.strictEqual(out.buffer[0].file, 'anotherfile bar');
         });
 
     });
@@ -259,7 +259,7 @@ describe('shortstop', function () {
     describe('resolveFileSync', function () {
 
         it('should read json files', function () {
-            var resolver, data;
+            var resolver, out;
 
             resolver = shortstop.create();
             resolver.use('file', function (value) {
@@ -276,18 +276,19 @@ describe('shortstop', function () {
                 return value + ' bar';
             });
 
-            data = resolver.resolveFileSync(path.join(process.cwd(), 'fixtures', 'data.json'));
-            assert.isObject(data);
-            assert.strictEqual(data.foo, 'bar');
-            assert.strictEqual(data.foobar, 'foo bar');
-            assert.isString(data.file);
-            assert.isFunction(data.method);
-            assert(Buffer.isBuffer(data.buffer));
-            assert.strictEqual(data.buffer.toString(), 'Hello, world!');
+            out = resolver.resolveFileSync(path.join(process.cwd(), 'fixtures', 'data.json'));
+            assert.isObject(out);
+            assert.strictEqual(out.foo, 'bar');
+            assert.strictEqual(out.foobar, 'foo bar');
+            assert.isString(out.file);
+            assert.isFunction(out.method);
+            assert(Buffer.isBuffer(out.buffer));
+            assert.strictEqual(out.buffer.toString(), 'Hello, world!');
         });
 
+
         it('should read txt files', function () {
-            var resolver, data;
+            var resolver, out;
 
             resolver = shortstop.create();
             resolver.use('file', function (value) {
@@ -304,14 +305,45 @@ describe('shortstop', function () {
                 return value + ' bar';
             });
 
-            data = resolver.resolveFileSync(path.join(process.cwd(), 'fixtures', 'data.txt'));
-            assert.isObject(data);
-            assert.strictEqual(data.foo, 'bar');
-            assert.strictEqual(data.foobar, 'foo bar');
-            assert.isString(data.file);
-            assert.isFunction(data.method);
-            assert(Buffer.isBuffer(data.buffer));
-            assert.strictEqual(data.buffer.toString(), 'Hello, world!');
+            out = resolver.resolveFileSync(path.join(process.cwd(), 'fixtures', 'data.txt'));
+            assert.isObject(out);
+            assert.strictEqual(out.foo, 'bar');
+            assert.strictEqual(out.foobar, 'foo bar');
+            assert.isString(out.file);
+            assert.isFunction(out.method);
+            assert(Buffer.isBuffer(out.buffer));
+            assert.strictEqual(out.buffer.toString(), 'Hello, world!');
+        });
+
+    });
+
+
+    describe('parent resolvers', function () {
+
+        it('should include handlers registered with the parent when processing', function () {
+            var json, parent, child, data;
+
+            json = {
+                'foo': 'foo:test'
+            };
+
+            function foo(value) {
+                return value + ' foo';
+            }
+
+            function bar(value) {
+                return 'bar ' + value;
+            }
+
+
+            parent = shortstop.create();
+            parent.use('foo', foo);
+
+            child = shortstop.create(parent);
+            child.use('foo', bar);
+
+            data = child.resolve(json);
+            assert.strictEqual(data.foo, 'bar test foo');
         });
 
     });
