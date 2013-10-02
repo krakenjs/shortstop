@@ -34,15 +34,23 @@ exports.create = function (parent) {
                 }
 
                 fs.readFile(file, 'utf8', function (err, data) {
+                    var json, error;
+
                     if (err) {
                         done(err);
                         return;
                     }
+
                     try {
-                        done(null, JSON.parse(data));
+                        json = JSON.parse(data);
+                        error = null;
                     } catch (err) {
-                        done(err);
+                        json = undefined;
+                        error = err;
+                    } finally {
+                        done(error, json);
                     }
+
                 });
             }
         },
