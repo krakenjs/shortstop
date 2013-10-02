@@ -5,9 +5,6 @@ var fs = require('fs'),
     resolver = require('./lib/resolver');
 
 
-var JS_LIKE = /\.js(on)?$/;
-
-
 exports.create = function (parent) {
 
 
@@ -28,7 +25,7 @@ exports.create = function (parent) {
 
                 // Short circuit file types node can handle natively.
                 ext = path.extname(file);
-                if (ext === '' || JS_LIKE.test(ext)) {
+                if (ext === '' || require.extensions.hasOwnProperty(ext)) {
                     process.nextTick(done.bind(undefined, null, require(file)));
                     return;
                 }
@@ -57,10 +54,11 @@ exports.create = function (parent) {
 
         resolveFileSync: {
             value: function (file) {
-                var data;
+                var data, ext;
 
-                if (JS_LIKE.test(path.extname(file))) {
-                    return this.resolve(require(file))
+                ext = path.extname(file);
+                if (ext === '' || require.extensions.hasOwnProperty(ext)) {
+                    return this.resolve(require(file));
                 }
 
                 data = fs.readFileSync(file, 'utf8');
