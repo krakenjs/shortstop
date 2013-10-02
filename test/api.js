@@ -83,6 +83,9 @@ describe('shortstop', function () {
 
             unuse();
 
+            // Unuse should only be used once.
+            assert.isUndefined(unuse());
+
             assert.isObject(resolver._handlers['bar']);
             assert.strictEqual(resolver._handlers['bar'].stack.length, 0);
         });
