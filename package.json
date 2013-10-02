@@ -1,0 +1,28 @@
+{
+  "name": "shortstop",
+  "version": "0.0.1",
+  "description": "Enable use of protocols (such as file:, buffer:, or method:) in configuration files.",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.paypal.com:webcore/shortstop.git"
+  },
+  "publishConfig": {
+    "registry": "http://npm.paypal.com"
+  },
+  "keywords": [
+    "config",
+    "configuration"
+  ],
+  "author": "Erik Toth <ertoth@paypal.com>",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "abed6e83ffbfb6550c1850a9322fba50e1a7e45a",
+  "devDependencies": {
+    "mocha": "~1.13.0",
+    "chai": "~1.8.0"
+  }
+}
