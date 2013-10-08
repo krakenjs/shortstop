@@ -18,7 +18,12 @@
     "configuration"
   ],
   "author": "Erik Toth <ertoth@paypal.com>",
-  "license": "BSD",
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],
   "readmeFilename": "README.md",
   "gitHead": "abed6e83ffbfb6550c1850a9322fba50e1a7e45a",
   "devDependencies": {
