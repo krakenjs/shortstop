@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.paypal.com:webcore/shortstop.git"
+    "url": "https://github.com/paypal/shortstop.git"
   },
   "publishConfig": {
     "registry": "http://npm.paypal.com"
