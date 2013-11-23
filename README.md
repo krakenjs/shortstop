@@ -151,3 +151,21 @@ data = resolver.resolve(json2);
 //     "key": "path:foo/bar.key"
 // }
 ```
+
+#### Protocols
+
+Protocols can be chained, using the following format.
+
+```<protocol>:<value>|<protocol>:<value>```
+
+If available the previous protocol's is passed along to the next protocol's handlers.
+
+```
+function mycustomhandler(value, previousValue) {
+
+    // do something with previous value
+
+    return previousValue + ' ' + value;
+
+}
+```
