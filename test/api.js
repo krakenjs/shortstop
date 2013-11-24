@@ -1,4 +1,5 @@
 /*global describe:false, it:false, before:false, beforeEach:false, after:false, afterEach:false*/
+/*jshint node:true*/
 'use strict';
 
 var fs = require('fs'),
@@ -190,6 +191,76 @@ describe('shortstop', function () {
             assert.isArray(out.buffer);
             assert.isObject(out.buffer[0]);
             assert.strictEqual(out.buffer[0].file, 'anotherfile bar');
+        });
+
+        it('should handle chained protocol values', function () {
+
+            var data, resolver, out, seperator, expected, testFile;
+
+            data = {
+                foo: 'bar',
+                foobar: false,
+                chained: 'foo:bar|bar:buzz',
+                file: 'foo:bar|bar:buzz|file:'+ __filename,
+                delimeter: 'foo:bar||bar:buzz',
+                ignored: 'foo|:bar||bar:|buzz|file:'+ __filename
+            };
+
+            expected = {
+                chained: 'bar bar buzz bar',
+                delimeter: 'bar| bar buzz bar',
+                ignored: data.ignored
+            };
+
+            seperator = '<<~shortstop~>>';
+
+            resolver = shortstop.create();
+
+            resolver.use('foo', function (value, previous) {
+                return value + ' bar';
+            });
+
+            resolver.use('bar', function (value, previous) {
+                return previous + ' ' + value + ' bar';
+            });
+
+            resolver.use('file', function (value, previous) {
+
+                value = fs.readFileSync(value).toString();
+
+                return previous + seperator + value;
+
+            });
+
+            out = resolver.resolve(data);
+
+            assert.notStrictEqual(data, out);
+
+            assert.strictEqual(out.foo, 'bar');
+            assert.strictEqual(out.foobar, false);
+
+            // verify chaining works
+
+            assert.isString(out.chained);
+            assert.strictEqual(out.chained, expected.chained);
+
+            // verify loading files still work
+
+            testFile = out.file.split(seperator);
+            assert.isString(out.file);
+            assert.strictEqual(testFile.shift(), expected.chained);
+            assert.strictEqual(testFile.join(seperator), file(__filename));
+
+            // ensure protocol chain values can contain delimeters as values
+
+            assert.isString(out.delimeter);
+            assert.strictEqual(out.delimeter, expected.delimeter);
+
+            // ensure protocol chains must start with a protocol
+
+            assert.isString(out.ignored);
+            assert.strictEqual(out.ignored, expected.ignored);
+
         });
 
     });
