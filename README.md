@@ -158,7 +158,7 @@ Protocols can be chained, using the following format.
 
 ```<protocol>:<value>|<protocol>:<value>```
 
-If available the previous protocol's is passed along to the next protocol's handlers.
+If available the previous protocol's value is passed along to the next protocol's handlers.
 
 ```
 function mycustomhandler(value, previousValue) {
