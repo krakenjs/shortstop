@@ -156,11 +156,11 @@ data = resolver.resolve(json2);
 
 Protocols can be chained, using the following format.
 
-```<protocol>:<value>|<protocol>:<value>```
+`<protocol>:<value>|<protocol>:<value>`
 
 If available the previous protocol's value is passed along to the next protocol's handlers.
 
-```
+```javascript
 function mycustomhandler(value, previousValue) {
 
     // do something with previous value
