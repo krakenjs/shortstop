@@ -11,7 +11,7 @@
     "url": "https://github.com/paypal/shortstop.git"
   },
   "publishConfig": {
-    "registry": "http://npm.paypal.com"
+    "registry": "https://registry.npmjs.org"
   },
   "keywords": [
     "config",
@@ -25,9 +25,11 @@
     }
   ],
   "readmeFilename": "README.md",
-  "gitHead": "abed6e83ffbfb6550c1850a9322fba50e1a7e45a",
   "devDependencies": {
     "mocha": "~1.13.0",
-    "chai": "~1.8.0"
+    "chai": "~1.8.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.7.0",
+    "grunt-mocha-test": "~0.7.0"
   }
 }
