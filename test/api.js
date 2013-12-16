@@ -37,13 +37,13 @@ describe('shortstop', function () {
 
 
     function method(value) {
-        var tuple, obj, method;
+        var tuple, obj, _method;
 
         tuple = value.split('=>');
         obj = require(tuple[0]);
-        method = tuple[1];
+        _method = tuple[1];
 
-        return obj[method];
+        return obj[_method];
     }
 
 
@@ -201,9 +201,9 @@ describe('shortstop', function () {
                 foo: 'bar',
                 foobar: false,
                 chained: 'foo:bar|bar:buzz',
-                file: 'foo:bar|bar:buzz|file:'+ __filename,
+                file: 'foo:bar|bar:buzz|file:' + __filename,
                 delimeter: 'foo:bar||bar:buzz',
-                ignored: 'foo|:bar||bar:|buzz|file:'+ __filename
+                ignored: 'foo|:bar||bar:|buzz|file:' + __filename
             };
 
             expected = {
