@@ -1,0 +1,11 @@
+{
+    "foo": "bar",
+    "truthy": true,
+    "falsy": false,
+    "numeric": 10,
+    "call": "me:maybe",
+    "i": {
+        "came": "me:in",
+        "like": [ "me:a", { "wrecking" : "me:ball" } ]
+    }
+}

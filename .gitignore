@@ -1,4 +1,3 @@
-lib-cov
 *.seed
 *.log
 *.csv
@@ -10,10 +9,18 @@ lib-cov
 pids
 logs
 results
+coverage
+lib-cov
+xunit.xml
+node_modules
+npm-debug.log
+
+.project
 .idea
 .settings
-node_modules
+.iml
 
-npm-debug.log
-*.iml
-
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
