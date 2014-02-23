@@ -4,7 +4,9 @@
   "description": "Enable use of protocols (such as file:, buffer:, or method:) in configuration files.",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "tape test/*.js",
+    "cover": "istanbul cover tape -- test/*.js",
+    "lint": "jshint -c .jshintrc index.js"
   },
   "repository": {
     "type": "git",
@@ -25,11 +27,10 @@
     }
   ],
   "readmeFilename": "README.md",
-  "devDependencies": {
-    "mocha": "~1.13.0",
-    "chai": "~1.8.0",
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.7.0",
-    "grunt-mocha-test": "~0.7.0"
+  "devDependencies": {},
+  "dependencies": {
+    "tape": "~2.4.2",
+    "istanbul": "~0.2.4",
+    "jshint": "~2.4.3"
   }
 }

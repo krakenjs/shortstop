@@ -1,6 +1,5 @@
-/***@@@ BEGIN LICENSE @@@***/
 /*───────────────────────────────────────────────────────────────────────────*\
-│  Copyright (C) 2013 eBay Software Foundation                                │
+│  Copyright (C) 2014 eBay Software Foundation                                │
 │                                                                             │
 │hh ,'""`.                                                                    │
 │  / _  _ \  Licensed under the Apache License, Version 2.0 (the "License");  │
@@ -16,7 +15,6 @@
 │   See the License for the specific language governing permissions and       │
 │   limitations under the License.                                            │
 \*───────────────────────────────────────────────────────────────────────────*/
-/***@@@ END LICENSE @@@***/
 'use strict';
 
 var fs = require('fs'),
