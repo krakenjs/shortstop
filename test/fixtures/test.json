@@ -3,9 +3,9 @@
     "truthy": true,
     "falsy": false,
     "numeric": 10,
-    "call": "me:maybe",
+    "call": "foo:maybe",
     "i": {
-        "came": "me:in",
-        "like": [ "me:a", { "wrecking" : "me:ball" } ]
+        "came": "bar:in",
+        "like": [ "foo:a", { "wrecking" : "bar:ball" } ]
     }
 }

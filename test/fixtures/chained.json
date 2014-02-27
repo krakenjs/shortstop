@@ -1,8 +1,0 @@
-{
-    "foo": "bar",
-    "foobar": false,
-    "chained": "foo:bar|bar:buzz",
-    "chained2": "foo:bar|bar:buzz|bam:bang",
-    "delimeter": "foo:bar||bar:buzz",
-    "ignored": "foo|:bar||bar:|buzz|bam:bang"
-}
