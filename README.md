@@ -72,7 +72,7 @@ resolver.use('file', fs.readFile);
 json = {
     "key": "file:foo/baz.key",
     "certs": "path:certs/myapp"
-}
+};
 
 resolver.resolve(json, function (err, data) {
     console.log(data);
@@ -89,7 +89,6 @@ resolver.resolve(json, function (err, data) {
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
 
 ```javascript
-var fs = require('fs');
 var path = require('path');
 var shortstop = require('shortstop');
 
@@ -99,7 +98,7 @@ function resolve(value) {
         // Is absolute path already
         return value;
     }
-    return path.join(process.cwd(), value;
+    return path.join(process.cwd(), value);
 }
 
 var resolver, unuse, json;
@@ -115,16 +114,14 @@ resolver.resolve(json, function (err, data) {
     // {
     //     "key": "/path/to/my/foo/baz.key"
     // }
-});
 
+    unuse();
 
-
-unuse();
-
-resolver.resolve(json, function (err, data) {
-    console.log(data);
-    // {
-    //     "key": "path:foo/baz.key"
-    // }
+    resolver.resolve(json, function (err, data) {
+        console.log(data);
+        // {
+        //     "key": "path:foo/baz.key"
+        // }
+    });
 });
 ```
