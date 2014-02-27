@@ -1,7 +1,6 @@
 shortstop
 =========
 
-
 Sometimes JSON just isn't enough for configuration needs. Occasionally it would be nice to use arbitrary types as values,
 but JSON is necessarily a subset of all available JS types. `shortstop` enables the use of protocols and handlers to
 enable identification and special handling of json values.
@@ -43,9 +42,6 @@ resolver.resolve(json, function (err, data) {
     //     }
     // }
 });
-
-
-
 ```
 
 
@@ -85,23 +81,12 @@ resolver.resolve(json, function (err, data) {
     //     "certs": "/path/to/my/certs/myapp"
     // }
 });
-
-
 ```
 
 
 #### Removing Handlers
 
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
-
-
-```js
-// json1
-{
-    "key": "path:foo/baz.key"
-}
-```
-
 
 ```javascript
 var fs = require('fs');
@@ -142,6 +127,4 @@ resolver.resolve(json, function (err, data) {
     //     "key": "path:foo/baz.key"
     // }
 });
-
-
 ```
