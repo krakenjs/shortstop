@@ -46,7 +46,7 @@ resolver.resolve(json, function (err, data) {
 * `parent` (*Object*, optional) - An optional shortstop resolver. Returns a resolver instance.
 
 
-### resolver.use(protocol, handler)
+### resolver.use(protocol, handler);
 
 * `protocol` (*String*) - The protocol used to identify a property to be processed, e.g. "file"
 * `handler` (*Function*) - The implementation of the given protocol with signature `function (value, [callback])`
