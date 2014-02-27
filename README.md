@@ -19,8 +19,8 @@ enable identification and special handling of json values.
 ```
 
 ```javascript
-var fs = require('fs'),
-    shortstop = require('shortstop');
+var fs = require('fs');
+var shortstop = require('shortstop');
 
 
 function buffer(value) {
@@ -28,25 +28,27 @@ function buffer(value) {
 }
 
 
-function file(value) {
-    return fs.readFileSync(value);
+function file(value, cb) {
+    return fs.readFile(value, cb);
 }
 
 
-var resolver, data;
-resolver = shortstop.create();
+var resolver = shortstop.create();
 resolver.use('buffer', buffer);
 resolver.use('file', file);
 
-data = resolver.resolve(json);
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "secret": <Buffer ... >,
+    //     "ssl" {
+    //         "pfx": <Buffer ... >,
+    //         "key": <Buffer ... >
+    //     }
+    // }
+});
 
-// {
-//     "secret": <Buffer ... >,
-//     "ssl" {
-//         "pfx": <Buffer ... >,
-//         "key": <Buffer ... >
-//     }
-// }
+
 
 ```
 
@@ -64,38 +66,35 @@ of one handler will be the input of the next handler in the chain.
 
 ```javascript
 var fs = require('fs'),
-    path = require('path'),
-    shortstop = require('shortstop');
+var path = require('path'),
+var shortstop = require('shortstop');
 
 
-function path(value) {
+function resolve(value) {
     if (path.resolve(value) === value) {
         // Is absolute path already
         return value;
     }
-
-    return path.join(process.cwd(), value;
-}
-
-
-function file(value) {
-    return fs.readFileSync(value);
+    return path.join(process.cwd(), value);
 }
 
 
 var resolver, data;
 resolver = shortstop.create();
-resolver.use('path', path);
+resolver.use('path', resolve);
 
-resolver.use('file', path);
-resolver.use('file', file);
+resolver.use('file', resolve);
+resolver.use('file', fs.readFile);
 
-data = resolver.resolve(json);
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "key": <Buffer ... >,
+    //     "certs": "/path/to/my/certs/myapp"
+    // }
+});
 
-// {
-//     "key": <Buffer ... >,
-//     "certs": "/path/to/my/certs/myapp"
-// }
+
 ```
 
 
@@ -111,61 +110,42 @@ When registered, handlers return an `unregister` function you can call when you 
 }
 ```
 
-```js
-// json2
-{
-    "key": "path:foo/bar.key"
-}
-```
 
 ```javascript
-var fs = require('fs'),
-    path = require('path'),
-    shortstop = require('shortstop');
+var fs = require('fs');
+var path = require('path');
+var shortstop = require('shortstop');
 
 
-function path(value) {
+function resolve(value) {
     if (path.resolve(value) === value) {
         // Is absolute path already
         return value;
     }
-
     return path.join(process.cwd(), value;
 }
 
 var resolver, unuse, data;
 
 resolver = shortstop.create();
-unuse = resolver.use('path', path);
-data = resolver.resolve(json1);
+unuse = resolver.use('path', resolve);
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "key": "/path/to/my/foo/baz.key"
+    // }
+});
 
-// {
-//     "key": "/path/to/my/foo/baz.key"
-// }
+
 
 unuse();
 
-data = resolver.resolve(json2);
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "key": "path:foo/baz.key"
+    // }
+});
 
-// {
-//     "key": "path:foo/bar.key"
-// }
-```
 
-#### Protocols
-
-Protocols can be chained, using the following format.
-
-`<protocol>:<value>|<protocol>:<value>`
-
-If available the previous protocol's value is passed along to the next protocol's handlers.
-
-```javascript
-function mycustomhandler(value, previousValue) {
-
-    // do something with previous value
-
-    return previousValue + ' ' + value;
-
-}
 ```
