@@ -14,15 +14,11 @@ function buffer(value) {
     return new Buffer(value);
 }
 
-function file(value, cb) {
-    return fs.readFile(value, cb);
-}
-
 
 var resolver, json;
 resolver = shortstop.create();
 resolver.use('buffer', buffer);
-resolver.use('file', file);
+resolver.use('file', fs.readFile);
 
 json = {
     "secret": "buffer:SGVsbG8sIHdvcmxkIQ==",
