@@ -51,6 +51,8 @@ resolver.resolve(json, function (err, data) {
 * `protocol` (*String*) - The protocol used to identify a property to be processed, e.g. "file"
 * `handler` (*Function*) - The implementation of the given protocol with signature `function (value, [callback])`
 
+This method returns a function when invoked will remove the handler from the stack for this protocol.
+
 
 ### resolver.resolve(data, callback);
 
