@@ -104,10 +104,7 @@ function resolve(value) {
 var resolver, unuse, json;
 resolver = shortstop.create();
 unuse = resolver.use('path', resolve);
-
-json = {
-    "key": "path:foo/baz.key"
-}
+json = { "key": "path:foo/baz.key" };
 
 resolver.resolve(json, function (err, data) {
     console.log(data);
