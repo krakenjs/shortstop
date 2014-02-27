@@ -1,11 +1,11 @@
-shortstop
-=========
+# shortstop
 
 Sometimes JSON just isn't enough for configuration needs. Occasionally it would be nice to use arbitrary types as values,
 but JSON is necessarily a subset of all available JS types. `shortstop` enables the use of protocols and handlers to
 enable identification and special handling of json values.
 
-#### The Basics
+[![Build Status](https://travis-ci.org/paypal/shortstop-handlers.png?branch=master)](https://travis-ci.org/paypal/shortstop-handlers)
+
 ```javascript
 var fs = require('fs');
 var shortstop = require('shortstop');
@@ -40,8 +40,31 @@ resolver.resolve(json, function (err, data) {
 });
 ```
 
+## API
+### shortstop.create([parent]);
 
-#### Multiple handlers
+* `parent` (*Object*, optional) - An optional shortstop resolver. Returns a resolver instance.
+
+
+### resolver.use(protocol, handler)
+
+* `protocol` (*String*) - The protocol used to identify a property to be processed, e.g. "file"
+* `handler` (*Function*) - The implementation of the given protocol with signature `function (value, [callback])`
+
+
+### resolver.resolve(data, callback);
+
+* `data` (*Object*) - The object, containing protocols in values, to be processed.
+* `callback` (*Function*) - The callback invoked when the processing is complete with signature `function (err, result)`.
+
+
+### resolver.resolveFile(path, callback);
+
+* `path` (*String*) - The path to a file which is, or exports, JSON or a javascript object.
+* `callback` (*Function*) - The callback invoked when the processing is complete with signature `function (err, result)`.
+
+
+## Multiple handlers
 Multiple handlers can be registered for a given protocol. They will be executed in the order registered and the output
 of one handler will be the input of the next handler in the chain.
 
@@ -80,7 +103,7 @@ resolver.resolve(json, function (err, data) {
 ```
 
 
-#### Removing Handlers
+## Removing Handlers
 
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
 
