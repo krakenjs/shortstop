@@ -17,70 +17,45 @@
 \*───────────────────────────────────────────────────────────────────────────*/
 'use strict';
 
-var fs = require('fs'),
-    path = require('path'),
-    resolver = require('./lib/resolver');
+var fs = require('fs');
+var path = require('path');
+var resolver = require('./lib/resolver');
 
 
-exports.create = function (parent) {
+function isModule(file) {
+    // require.resolve will locate a file without a known extension (e.g. txt)
+    // and try to load it as javascript. That won't work for this case.
+    var ext = path.extname(file);
+    return ext === '' || require.extensions.hasOwnProperty(ext);
+}
 
+
+exports.create = function create(parent) {
 
     return Object.create(resolver.create(parent), {
 
         resolveFile: {
-            value: function (file, callback) {
-                var self, ext;
+            value: function resolveFile(file, callback) {
+                var resolve = this.resolve.bind(this);
 
-                self = this;
-                function done(err, data) {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    callback(null, self.resolve(data));
-                }
-
-                // Short circuit file types node can handle natively.
-                ext = path.extname(file);
-                if (ext === '' || require.extensions.hasOwnProperty(ext)) {
-                    process.nextTick(done.bind(undefined, null, require(file)));
+                if (isModule(file)) {
+                    resolve(require(file), callback);
                     return;
                 }
 
                 fs.readFile(file, 'utf8', function (err, data) {
-                    var json, error;
-
                     if (err) {
-                        done(err);
+                        callback(err);
                         return;
                     }
 
                     try {
-                        json = JSON.parse(data);
-                        error = null;
+                        data = JSON.parse(data);
+                        resolve(data, callback);
                     } catch (err) {
-                        json = undefined;
-                        error = err;
-                    } finally {
-                        done(error, json);
+                        callback(err);
                     }
-
                 });
-            }
-        },
-
-        resolveFileSync: {
-            value: function (file) {
-                var data, ext;
-
-                ext = path.extname(file);
-                if (ext === '' || require.extensions.hasOwnProperty(ext)) {
-                    return this.resolve(require(file));
-                }
-
-                data = fs.readFileSync(file, 'utf8');
-                data = JSON.parse(data);
-                return this.resolve(data);
             }
         }
 

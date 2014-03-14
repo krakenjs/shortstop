@@ -1,171 +1,145 @@
-shortstop
-=========
-
+# shortstop
 
 Sometimes JSON just isn't enough for configuration needs. Occasionally it would be nice to use arbitrary types as values,
 but JSON is necessarily a subset of all available JS types. `shortstop` enables the use of protocols and handlers to
 enable identification and special handling of json values.
 
-#### The Basics
-
-```json
-{
-    "secret": "buffer:SGVsbG8sIHdvcmxkIQ==",
-    "ssl": {
-        "pfx": "file:foo/bar",
-        "key": "file:foo/baz.key",
-    }
-}
-```
+[![Build Status](https://travis-ci.org/paypal/shortstop-handlers.png?branch=master)](https://travis-ci.org/paypal/shortstop-handlers)
 
 ```javascript
-var fs = require('fs'),
-    shortstop = require('shortstop');
-
+var fs = require('fs');
+var shortstop = require('shortstop');
 
 function buffer(value) {
     return new Buffer(value);
 }
 
 
-function file(value) {
-    return fs.readFileSync(value);
-}
-
-
-var resolver, data;
+var resolver, json;
 resolver = shortstop.create();
 resolver.use('buffer', buffer);
-resolver.use('file', file);
+resolver.use('file', fs.readFile);
 
-data = resolver.resolve(json);
+json = {
+    "secret": "buffer:SGVsbG8sIHdvcmxkIQ==",
+    "ssl": {
+        "pfx": "file:foo/bar",
+        "key": "file:foo/baz.key",
+    }
+};
 
-// {
-//     "secret": <Buffer ... >,
-//     "ssl" {
-//         "pfx": <Buffer ... >,
-//         "key": <Buffer ... >
-//     }
-// }
-
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "secret": <Buffer ... >,
+    //     "ssl" {
+    //         "pfx": <Buffer ... >,
+    //         "key": <Buffer ... >
+    //     }
+    // }
+});
 ```
 
+## API
+### shortstop.create([parent]);
 
-#### Multiple handlers
+* `parent` (*Object*, optional) - An optional shortstop resolver. Returns a resolver instance.
+
+
+### resolver.use(protocol, handler);
+
+* `protocol` (*String*) - The protocol used to identify a property to be processed, e.g. "file"
+* `handler` (*Function*) - The implementation of the given protocol with signature `function (value, [callback])`
+
+This method returns a function when invoked will remove the handler from the stack for this protocol.
+
+
+### resolver.resolve(data, callback);
+
+* `data` (*Object*) - The object, containing protocols in values, to be processed.
+* `callback` (*Function*) - The callback invoked when the processing is complete with signature `function (err, result)`.
+
+
+### resolver.resolveFile(path, callback);
+
+* `path` (*String*) - The path to a file which is, or exports, JSON or a javascript object.
+* `callback` (*Function*) - The callback invoked when the processing is complete with signature `function (err, result)`.
+
+
+## Multiple handlers
 Multiple handlers can be registered for a given protocol. They will be executed in the order registered and the output
 of one handler will be the input of the next handler in the chain.
 
-```json
-{
-    "key": "file:foo/baz.key",
-    "certs": "path:certs/myapp"
-}
-```
-
 ```javascript
 var fs = require('fs'),
-    path = require('path'),
-    shortstop = require('shortstop');
+var path = require('path'),
+var shortstop = require('shortstop');
 
-
-function path(value) {
+function resolve(value) {
     if (path.resolve(value) === value) {
         // Is absolute path already
         return value;
     }
-
-    return path.join(process.cwd(), value;
+    return path.join(process.cwd(), value);
 }
 
 
-function file(value) {
-    return fs.readFileSync(value);
-}
-
-
-var resolver, data;
+var resolver, json;
 resolver = shortstop.create();
-resolver.use('path', path);
+resolver.use('path', resolve);
+resolver.use('file', resolve);
+resolver.use('file', fs.readFile);
 
-resolver.use('file', path);
-resolver.use('file', file);
+json = {
+    "key": "file:foo/baz.key",
+    "certs": "path:certs/myapp"
+};
 
-data = resolver.resolve(json);
-
-// {
-//     "key": <Buffer ... >,
-//     "certs": "/path/to/my/certs/myapp"
-// }
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "key": <Buffer ... >,
+    //     "certs": "/path/to/my/certs/myapp"
+    // }
+});
 ```
 
 
-#### Removing Handlers
+## Removing Handlers
 
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
 
-
-```js
-// json1
-{
-    "key": "path:foo/baz.key"
-}
-```
-
-```js
-// json2
-{
-    "key": "path:foo/bar.key"
-}
-```
-
 ```javascript
-var fs = require('fs'),
-    path = require('path'),
-    shortstop = require('shortstop');
+var path = require('path');
+var shortstop = require('shortstop');
 
 
-function path(value) {
+function resolve(value) {
     if (path.resolve(value) === value) {
         // Is absolute path already
         return value;
     }
-
-    return path.join(process.cwd(), value;
+    return path.join(process.cwd(), value);
 }
 
-var resolver, unuse, data;
-
+var resolver, unuse, json;
 resolver = shortstop.create();
-unuse = resolver.use('path', path);
-data = resolver.resolve(json1);
+unuse = resolver.use('path', resolve);
+json = { "key": "path:foo/baz.key" };
 
-// {
-//     "key": "/path/to/my/foo/baz.key"
-// }
+resolver.resolve(json, function (err, data) {
+    console.log(data);
+    // {
+    //     "key": "/path/to/my/foo/baz.key"
+    // }
 
-unuse();
+    unuse();
 
-data = resolver.resolve(json2);
-
-// {
-//     "key": "path:foo/bar.key"
-// }
-```
-
-#### Protocols
-
-Protocols can be chained, using the following format.
-
-`<protocol>:<value>|<protocol>:<value>`
-
-If available the previous protocol's value is passed along to the next protocol's handlers.
-
-```javascript
-function mycustomhandler(value, previousValue) {
-
-    // do something with previous value
-
-    return previousValue + ' ' + value;
-
-}
+    resolver.resolve(json, function (err, data) {
+        console.log(data);
+        // {
+        //     "key": "path:foo/baz.key"
+        // }
+    });
+});
 ```
