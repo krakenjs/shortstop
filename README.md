@@ -4,7 +4,7 @@ Sometimes JSON just isn't enough for configuration needs. Occasionally it would 
 but JSON is necessarily a subset of all available JS types. `shortstop` enables the use of protocols and handlers to
 enable identification and special handling of json values.
 
-[![Build Status](https://travis-ci.org/paypal/shortstop-handlers.png?branch=master)](https://travis-ci.org/paypal/shortstop-handlers)
+[![Build Status](https://travis-ci.org/krakenjs/shortstop.png?branch=master)](https://travis-ci.org/krakenjs/shortstop)
 
 ```javascript
 var fs = require('fs');
