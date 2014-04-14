@@ -23,6 +23,7 @@ test('shortstop', function (t) {
         t.equal(typeof resolver.use, 'function');
         t.equal(typeof resolver.resolve, 'function');
         t.equal(typeof resolver.resolveFile, 'function');
+        t.equal(resolver.didResolve(), false);
         t.end();
     });
 
