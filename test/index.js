@@ -192,6 +192,7 @@ test('shortstop', function (t) {
             t.equal(actual.i.came,    'in_bar');
             t.equal(actual.i.like[0], 'a_foo');
             t.equal(actual.i.like[1].wrecking, 'ball_bar');
+            t.equal(resolver.didResolve(), true);
             t.end();
         });
     });
