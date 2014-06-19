@@ -329,4 +329,31 @@ test('shortstop', function (t) {
     });
 
 
+    t.test('preserve buffers', function (t) {
+        var resolver;
+
+        function file(value, cb) {
+            require('fs').readFile(value, cb);
+        }
+
+        resolver = shortstop.create();
+        resolver.use('file', file);
+        resolver.resolve({ buffer: 'file:./index.js' }, function (err, data) {
+            t.error(err);
+            t.ok(data);
+            t.ok(data.buffer);
+            t.ok(Buffer.isBuffer(data.buffer));
+
+            resolver = shortstop.create();
+            resolver.resolve(data, function (err, data) {
+                t.error(err);
+                t.ok(data);
+                t.ok(data.buffer);
+                t.ok(Buffer.isBuffer(data.buffer));
+                t.end();
+            });
+        });
+    });
+
+
 });
