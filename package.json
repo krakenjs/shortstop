@@ -1,6 +1,6 @@
 {
   "name": "shortstop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enable use of protocols (such as file:, buffer:, or method:) in configuration files.",
   "main": "index.js",
   "scripts": {
