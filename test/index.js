@@ -329,4 +329,52 @@ test('shortstop', function (t) {
     });
 
 
+    t.test('preserve types', function (t) {
+
+        t.test('Buffer', function (t) {
+            var resolver;
+
+            resolver = shortstop.create();
+            resolver.resolve({ buffer: new Buffer(0) }, function (err, data) {
+                t.error(err);
+                t.ok(data);
+                t.ok(data.buffer);
+                t.ok(Buffer.isBuffer(data.buffer));
+                t.end()
+            });
+        });
+
+
+        t.test('Date', function (t) {
+            var resolver;
+
+            resolver = shortstop.create();
+            resolver.resolve({ date: new Date() }, function (err, data) {
+                t.error(err);
+                t.ok(data);
+                t.ok(data.date);
+                t.ok(data.date.constructor === Date);
+                t.ok(Object.getPrototypeOf(data.date) !== Object.prototype);
+                t.end()
+            });
+        });
+
+
+        t.test('RegExp', function (t) {
+            var resolver;
+
+            resolver = shortstop.create();
+            resolver.resolve({ regexp: new RegExp('.') }, function (err, data) {
+                t.error(err);
+                t.ok(data);
+                t.ok(data.regexp);
+                t.ok(data.regexp.constructor === RegExp);
+                t.ok(Object.getPrototypeOf(data.regexp) !== Object.prototype);
+                t.end()
+            });
+        });
+
+    });
+
+
 });
