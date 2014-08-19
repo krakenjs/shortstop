@@ -39,7 +39,7 @@ exports.create = function create(parent) {
                 var resolve = this.resolve.bind(this);
 
                 if (isModule(file)) {
-                    resolve(require(file), callback);
+                    resolve(require(file), file, callback);
                     return;
                 }
 
@@ -51,7 +51,7 @@ exports.create = function create(parent) {
 
                     try {
                         data = JSON.parse(data);
-                        resolve(data, callback);
+                        resolve(data, file, callback);
                     } catch (err) {
                         callback(err);
                     }
