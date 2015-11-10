@@ -162,6 +162,27 @@ test('shortstop', function (t) {
     });
 
 
+    t.test('resolve with filename', function (t) {
+        var resolver, expected;
+
+        resolver = shortstop.create();
+        resolver.use('foo', foo);
+        resolver.use('bar', function(data, file, cb) {
+            cb(null, file+data);
+        });
+
+        expected = { foo: 'foo:foo', bar: 'bar:bar', baz: false };
+        resolver.resolve(expected, __filename, function  resolve(err, actual) {
+            t.error(err);
+            t.equal(actual.foo, 'foo_foo');
+            t.equal(actual.bar, __filename + 'bar');
+            t.equal(actual.baz, false);
+            t.notEqual(actual, expected);
+            t.end();
+        });
+    });
+
+
     t.test('nested resolve', function (t) {
         var resolver, expected;
 
