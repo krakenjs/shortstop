@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.js",
-    "cover": "istanbul cover tape -- test/*.js",
+    "cover": "nyc tape test/*.js",
     "lint": "jshint -c .jshintrc index.js"
   },
   "repository": {
@@ -28,9 +28,9 @@
   ],
   "readmeFilename": "README.md",
   "devDependencies": {
-    "tape": "~2.5.0",
-    "istanbul": "~0.2.4",
-    "jshint": "~2.4.4"
+    "jshint": "~2.4.4",
+    "nyc": "^13.3.0",
+    "tape": "~2.5.0"
   },
   "dependencies": {
     "core-util-is": "~1.0.1",
