@@ -1,5 +1,6 @@
 # shortstop
 
+[![Npm version](https://img.shields.io/npm/v/shortstop.svg)](https://www.npmjs.com/package/shortstop)
 [![Build Status](https://travis-ci.org/krakenjs/shortstop.svg?branch=master)](https://travis-ci.org/krakenjs/shortstop)
 [![codecov](https://codecov.io/gh/krakenjs/shortstop/branch/master/graph/badge.svg)](https://codecov.io/gh/krakenjs/shortstop)
 
@@ -8,20 +9,18 @@ but JSON is necessarily a subset of all available JS types. `shortstop` enables 
 enable identification and special handling of json values.
 
 ```javascript
-var fs = require('fs');
-var shortstop = require('shortstop');
+const fs = require('fs');
+const shortstop = require('shortstop');
 
 function buffer(value) {
     return new Buffer(value);
 }
 
-
-var resolver, json;
-resolver = shortstop.create();
+const resolver = shortstop.create();
 resolver.use('buffer', buffer);
 resolver.use('file', fs.readFile);
 
-json = {
+const json = {
     "secret": "buffer:SGVsbG8sIHdvcmxkIQ==",
     "ssl": {
         "pfx": "file:foo/bar",
@@ -72,9 +71,9 @@ Multiple handlers can be registered for a given protocol. They will be executed 
 of one handler will be the input of the next handler in the chain.
 
 ```javascript
-var fs = require('fs'),
-var path = require('path'),
-var shortstop = require('shortstop');
+const fs = require('fs');
+const path = require('path');
+const shortstop = require('shortstop');
 
 function resolve(value) {
     if (path.resolve(value) === value) {
@@ -84,14 +83,12 @@ function resolve(value) {
     return path.join(process.cwd(), value);
 }
 
-
-var resolver, json;
-resolver = shortstop.create();
+const resolver = shortstop.create();
 resolver.use('path', resolve);
 resolver.use('file', resolve);
 resolver.use('file', fs.readFile);
 
-json = {
+const json = {
     "key": "file:foo/baz.key",
     "certs": "path:certs/myapp"
 };
@@ -111,8 +108,8 @@ resolver.resolve(json, function (err, data) {
 When registered, handlers return an `unregister` function you can call when you no longer want a handler in the chain.
 
 ```javascript
-var path = require('path');
-var shortstop = require('shortstop');
+const path = require('path');
+const shortstop = require('shortstop');
 
 
 function resolve(value) {
@@ -123,10 +120,9 @@ function resolve(value) {
     return path.join(process.cwd(), value);
 }
 
-var resolver, unuse, json;
-resolver = shortstop.create();
-unuse = resolver.use('path', resolve);
-json = { "key": "path:foo/baz.key" };
+const resolver = shortstop.create();
+const unuse = resolver.use('path', resolve);
+const json = { "key": "path:foo/baz.key" };
 
 resolver.resolve(json, function (err, data) {
     console.log(data);
