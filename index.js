@@ -15,17 +15,16 @@
 │   See the License for the specific language governing permissions and       │
 │   limitations under the License.                                            │
 \*───────────────────────────────────────────────────────────────────────────*/
-'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var resolver = require('./lib/resolver');
+const fs = require('fs');
+const path = require('path');
+const resolver = require('./lib/resolver');
 
 
 function isModule(file) {
     // require.resolve will locate a file without a known extension (e.g. txt)
     // and try to load it as javascript. That won't work for this case.
-    var ext = path.extname(file);
+    const ext = path.extname(file);
     return ext === '' || require.extensions[ext];
 }
 
@@ -36,14 +35,12 @@ exports.create = function create(parent) {
 
         resolveFile: {
             value: function resolveFile(file, callback) {
-                var resolve = this.resolve.bind(this);
-
                 if (isModule(file)) {
-                    resolve(require(file), file, callback);
+                    this.resolve(require(file), file, callback);
                     return;
                 }
 
-                fs.readFile(file, 'utf8', function (err, data) {
+                fs.readFile(file, 'utf8', (err, data) => {
                     if (err) {
                         callback(err);
                         return;
@@ -51,7 +48,7 @@ exports.create = function create(parent) {
 
                     try {
                         data = JSON.parse(data);
-                        resolve(data, file, callback);
+                        this.resolve(data, file, callback);
                     } catch (_err) {
                         callback(_err);
                     }
