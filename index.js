@@ -52,8 +52,8 @@ exports.create = function create(parent) {
                     try {
                         data = JSON.parse(data);
                         resolve(data, file, callback);
-                    } catch (err) {
-                        callback(err);
+                    } catch (_err) {
+                        callback(_err);
                     }
                 });
             }

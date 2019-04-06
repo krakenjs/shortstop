@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tape test/*.js",
     "cover": "nyc tape test/*.js",
-    "lint": "jshint -c .jshintrc index.js"
+    "lint": "eslint index.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   ],
   "readmeFilename": "README.md",
   "devDependencies": {
-    "jshint": "~2.10.2",
+    "eslint": "^5.16.0",
     "nyc": "^13.3.0",
     "tape": "~4.10.1"
   },
