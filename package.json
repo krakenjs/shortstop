@@ -6,7 +6,8 @@
   "scripts": {
     "test": "tape test/*.js",
     "cover": "nyc tape test/*.js",
-    "lint": "eslint index.js"
+    "lint": "eslint index.js",
+    "publish-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   ],
   "readmeFilename": "README.md",
   "devDependencies": {
+    "codecov": "^3.3.0",
     "eslint": "^5.16.0",
     "nyc": "^13.3.0",
     "tape": "~4.10.1"

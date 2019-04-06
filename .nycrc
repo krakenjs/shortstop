@@ -1,0 +1,12 @@
+{
+  "reporter": [
+    "lcov",
+    "text-summary",
+    "html"
+  ],
+  "include": [
+      "lib/*.js",
+      "index.js"
+  ],
+  "all": true
+}

@@ -1,9 +1,18 @@
 language: node_js
+
 node_js:
   - "6"
   - "8"
   - "10"
   - "11"
+
 script:
-  - "npm run lint"
-  - "npm run cover"
+  - npm run lint
+  - npm run cover
+
+after_script:
+  - npm run publish-coverage
+
+cache:
+  directories:
+      - node_modules

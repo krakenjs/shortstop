@@ -1,6 +1,7 @@
 # shortstop
 
-[![Build Status](https://travis-ci.org/krakenjs/shortstop.svg?branch=master)](https://travis-ci.org/krakenjs/shortstop)  
+[![Build Status](https://travis-ci.org/krakenjs/shortstop.svg?branch=master)](https://travis-ci.org/krakenjs/shortstop)
+[![codecov](https://codecov.io/gh/krakenjs/shortstop/branch/master/graph/badge.svg)](https://codecov.io/gh/krakenjs/shortstop)
 
 Sometimes JSON just isn't enough for configuration needs. Occasionally it would be nice to use arbitrary types as values,
 but JSON is necessarily a subset of all available JS types. `shortstop` enables the use of protocols and handlers to
