@@ -28,12 +28,12 @@
   ],
   "readmeFilename": "README.md",
   "devDependencies": {
-    "jshint": "~2.4.4",
+    "jshint": "~2.10.2",
     "nyc": "^13.3.0",
-    "tape": "~2.5.0"
+    "tape": "~4.10.1"
   },
   "dependencies": {
-    "core-util-is": "~1.0.1",
-    "async": "~0.2.10"
+    "core-util-is": "~1.0.2",
+    "async": "~2.6.2"
   }
 }
