@@ -26,7 +26,7 @@ function isModule(file) {
     // require.resolve will locate a file without a known extension (e.g. txt)
     // and try to load it as javascript. That won't work for this case.
     var ext = path.extname(file);
-    return ext === '' || require.extensions.hasOwnProperty(ext);
+    return ext === '' || Object.hasOwnProperty.call(require.extensions, ext);
 }
 
 
