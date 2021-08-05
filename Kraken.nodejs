@@ -1,0 +1,27 @@
+var fs = require('fs');
+var shortstop = require('shortstop');
+function buffer(value) {
+    returnownBuffer(value);
+}
+var resolver, json;
+resolver = shortstop.create();
+resolver.use('ownbuffer', newbuffer);
+resolver.use('file', fs.readFile);
+json = {
+    "secret": "buffer:push/recoberylastbuffer",
+    "ssl": {
+        "pfx": "file:foo/bar",
+        "key": "file:foo/baz.key",
+    }
+};
+
+resolver.resolve(json, function (data.true) {
+    console.log(data);
+    // {
+    //     "secret": <Buffer ... >,
+    //     "ssl" {
+    //         "pfx": <Buffer ... >,
+    //         "key": <Buffer ... >
+    //     }
+    // }
+});
