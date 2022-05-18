@@ -4,10 +4,7 @@ var test = require('tape');
 var path = require('path');
 var shortstop = require('../');
 
-
 test('shortstop', function (t) {
-
-
     function foo(input) {
         return input + '_foo';
     }
@@ -15,7 +12,6 @@ test('shortstop', function (t) {
     function bar(input, cb) {
         setImmediate(cb.bind(null, null, input + '_bar'));
     }
-
 
     t.test('resolver', function (t) {
         var resolver = shortstop.create();
@@ -25,7 +21,6 @@ test('shortstop', function (t) {
         t.equal(typeof resolver.resolveFile, 'function');
         t.end();
     });
-
 
     t.test('use', function (t) {
         var resolver;
@@ -37,7 +32,6 @@ test('shortstop', function (t) {
         t.equal(resolver._handlers['foo'].stack.length, 1);
         t.end();
     });
-
 
     t.test('unuse', function (t) {
         var resolver, unuseA, unuseB, unuseC;
@@ -92,7 +86,6 @@ test('shortstop', function (t) {
         t.end();
     });
 
-
     t.test('unuse stack', function (t) {
         var name, resolver, unuseA, unuseB, unuseC, removed;
 
@@ -142,7 +135,6 @@ test('shortstop', function (t) {
         t.end();
     });
 
-
     t.test('resolve', function (t) {
         var resolver, expected;
 
@@ -150,8 +142,8 @@ test('shortstop', function (t) {
         resolver.use('foo', foo);
         resolver.use('bar', bar);
 
-        expected = { foo: 'foo:foo', bar: 'bar:bar', baz: false };
-        resolver.resolve(expected, function  resolve(err, actual) {
+        expected = {foo: 'foo:foo', bar: 'bar:bar', baz: false};
+        resolver.resolve(expected, function resolve(err, actual) {
             t.error(err);
             t.equal(actual.foo, 'foo_foo');
             t.equal(actual.bar, 'bar_bar');
@@ -161,18 +153,17 @@ test('shortstop', function (t) {
         });
     });
 
-
     t.test('resolve with filename', function (t) {
         var resolver, expected;
 
         resolver = shortstop.create();
         resolver.use('foo', foo);
-        resolver.use('bar', function(data, file, cb) {
-            cb(null, file+data);
+        resolver.use('bar', function (data, file, cb) {
+            cb(null, file + data);
         });
 
-        expected = { foo: 'foo:foo', bar: 'bar:bar', baz: false };
-        resolver.resolve(expected, __filename, function  resolve(err, actual) {
+        expected = {foo: 'foo:foo', bar: 'bar:bar', baz: false};
+        resolver.resolve(expected, __filename, function resolve(err, actual) {
             t.error(err);
             t.equal(actual.foo, 'foo_foo');
             t.equal(actual.bar, __filename + 'bar');
@@ -181,7 +172,6 @@ test('shortstop', function (t) {
             t.end();
         });
     });
-
 
     t.test('nested resolve', function (t) {
         var resolver, expected;
@@ -198,25 +188,24 @@ test('shortstop', function (t) {
             call: 'foo:maybe',
             i: {
                 came: 'bar:in',
-                like: [ 'foo:a', { wrecking : 'bar:ball' } ]
-            }
+                like: ['foo:a', {wrecking: 'bar:ball'}],
+            },
         };
 
         resolver.resolve(expected, function resolve(err, actual) {
             t.error(err);
             t.notEqual(actual, expected);
-            t.equal(actual.foo,       expected.foo);
-            t.equal(actual.truthy,    expected.truthy);
-            t.equal(actual.falsy,     expected.falsy);
-            t.equal(actual.numeric,   expected.numeric);
-            t.equal(actual.call,      'maybe_foo');
-            t.equal(actual.i.came,    'in_bar');
+            t.equal(actual.foo, expected.foo);
+            t.equal(actual.truthy, expected.truthy);
+            t.equal(actual.falsy, expected.falsy);
+            t.equal(actual.numeric, expected.numeric);
+            t.equal(actual.call, 'maybe_foo');
+            t.equal(actual.i.came, 'in_bar');
             t.equal(actual.i.like[0], 'a_foo');
             t.equal(actual.i.like[1].wrecking, 'ball_bar');
             t.end();
         });
     });
-
 
     t.test('async resolve error', function (t) {
         var resolver, expected;
@@ -226,15 +215,14 @@ test('shortstop', function (t) {
             cb(new Error('fail'));
         });
 
-        expected = { foo: 'foo:foo', bar: false };
-        resolver.resolve(expected, function  resolve(err, actual) {
+        expected = {foo: 'foo:foo', bar: false};
+        resolver.resolve(expected, function resolve(err, actual) {
             t.ok(err);
             t.equal(err.message, 'fail');
             t.notOk(actual);
             t.end();
         });
     });
-
 
     t.test('sync resolve uncaught error', function (t) {
         var resolver, expected;
@@ -244,15 +232,14 @@ test('shortstop', function (t) {
             throw new Error('fail');
         });
 
-        expected = { foo: 'test:foo', bar: false };
-        resolver.resolve(expected, function  resolve(err, actual) {
+        expected = {foo: 'test:foo', bar: false};
+        resolver.resolve(expected, function resolve(err, actual) {
             t.ok(err);
             t.equal(err.message, 'fail');
             t.notOk(actual);
             t.end();
         });
     });
-
 
     t.test('resolveFile', function (t) {
         var resolver, expected;
@@ -262,20 +249,22 @@ test('shortstop', function (t) {
         resolver.use('bar', bar);
 
         expected = require('./fixtures/test');
-        resolver.resolveFile(path.resolve(__dirname, './fixtures/test'), function resolve(err, actual) {
-            t.error(err);
-            t.equal(actual.foo,       expected.foo);
-            t.equal(actual.truthy,    expected.truthy);
-            t.equal(actual.falsy,     expected.falsy);
-            t.equal(actual.numeric,   expected.numeric);
-            t.equal(actual.call,      'maybe_foo');
-            t.equal(actual.i.came,    'in_bar');
-            t.equal(actual.i.like[0], 'a_foo');
-            t.equal(actual.i.like[1].wrecking, 'ball_bar');
-            t.end();
-        });
+        resolver.resolveFile(
+            path.resolve(__dirname, './fixtures/test'),
+            function resolve(err, actual) {
+                t.error(err);
+                t.equal(actual.foo, expected.foo);
+                t.equal(actual.truthy, expected.truthy);
+                t.equal(actual.falsy, expected.falsy);
+                t.equal(actual.numeric, expected.numeric);
+                t.equal(actual.call, 'maybe_foo');
+                t.equal(actual.i.came, 'in_bar');
+                t.equal(actual.i.like[0], 'a_foo');
+                t.equal(actual.i.like[1].wrecking, 'ball_bar');
+                t.end();
+            }
+        );
     });
-
 
     t.test('resolveFile txt', function (t) {
         var resolver, expected;
@@ -285,20 +274,22 @@ test('shortstop', function (t) {
         resolver.use('bar', bar);
 
         expected = require('./fixtures/test');
-        resolver.resolveFile(path.resolve(__dirname, './fixtures/test.txt'), function (err, actual) {
-            t.error(err);
-            t.equal(actual.foo,       expected.foo);
-            t.equal(actual.truthy,    expected.truthy);
-            t.equal(actual.falsy,     expected.falsy);
-            t.equal(actual.numeric,   expected.numeric);
-            t.equal(actual.call,      'maybe_foo');
-            t.equal(actual.i.came,    'in_bar');
-            t.equal(actual.i.like[0], 'a_foo');
-            t.equal(actual.i.like[1].wrecking, 'ball_bar');
-            t.end();
-        });
+        resolver.resolveFile(
+            path.resolve(__dirname, './fixtures/test.txt'),
+            function (err, actual) {
+                t.error(err);
+                t.equal(actual.foo, expected.foo);
+                t.equal(actual.truthy, expected.truthy);
+                t.equal(actual.falsy, expected.falsy);
+                t.equal(actual.numeric, expected.numeric);
+                t.equal(actual.call, 'maybe_foo');
+                t.equal(actual.i.came, 'in_bar');
+                t.equal(actual.i.like[0], 'a_foo');
+                t.equal(actual.i.like[1].wrecking, 'ball_bar');
+                t.end();
+            }
+        );
     });
-
 
     t.test('resolveFile error', function (t) {
         var resolver;
@@ -308,14 +299,16 @@ test('shortstop', function (t) {
             t.ok(err);
             t.notOk(actual);
 
-            resolver.resolveFile(path.resolve(__dirname, './fixtures/invalid.txt'), function (err, actual) {
-                t.ok(err);
-                t.notOk(actual);
-                t.end();
-            });
+            resolver.resolveFile(
+                path.resolve(__dirname, './fixtures/invalid.txt'),
+                function (err, actual) {
+                    t.ok(err);
+                    t.notOk(actual);
+                    t.end();
+                }
+            );
         });
     });
-
 
     t.test('stack', function (t) {
         var parent, child, expected;
@@ -349,53 +342,46 @@ test('shortstop', function (t) {
         });
     });
 
-
     t.test('preserve types', function (t) {
-
         t.test('Buffer', function (t) {
             var resolver;
 
             resolver = shortstop.create();
-            resolver.resolve({ buffer: new Buffer(0) }, function (err, data) {
+            resolver.resolve({buffer: Buffer.alloc(0)}, function (err, data) {
                 t.error(err);
                 t.ok(data);
                 t.ok(data.buffer);
                 t.ok(Buffer.isBuffer(data.buffer));
-                t.end()
+                t.end();
             });
         });
-
 
         t.test('Date', function (t) {
             var resolver;
 
             resolver = shortstop.create();
-            resolver.resolve({ date: new Date() }, function (err, data) {
+            resolver.resolve({date: new Date()}, function (err, data) {
                 t.error(err);
                 t.ok(data);
                 t.ok(data.date);
                 t.ok(data.date.constructor === Date);
                 t.ok(Object.getPrototypeOf(data.date) !== Object.prototype);
-                t.end()
+                t.end();
             });
         });
-
 
         t.test('RegExp', function (t) {
             var resolver;
 
             resolver = shortstop.create();
-            resolver.resolve({ regexp: new RegExp('.') }, function (err, data) {
+            resolver.resolve({regexp: new RegExp('.')}, function (err, data) {
                 t.error(err);
                 t.ok(data);
                 t.ok(data.regexp);
                 t.ok(data.regexp.constructor === RegExp);
                 t.ok(Object.getPrototypeOf(data.regexp) !== Object.prototype);
-                t.end()
+                t.end();
             });
         });
-
     });
-
-
 });
