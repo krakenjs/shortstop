@@ -33,7 +33,7 @@
     "jshint": "~2.4.4"
   },
   "dependencies": {
-    "core-util-is": "~1.0.1",
-    "async": "~0.2.10"
+    "async": "^3.2.4",
+    "core-util-is": "~1.0.1"
   }
 }
