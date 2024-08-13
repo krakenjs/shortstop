@@ -1,4 +1,7 @@
-# shortstop
+shortstop
+=========
+
+Lead Maintainer: [Poornima Venkat](https://github.com/pvenkatakrishnan/)
 
 [![Build Status](https://travis-ci.org/krakenjs/shortstop.svg?branch=master)](https://travis-ci.org/krakenjs/shortstop)  
 

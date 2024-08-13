@@ -1,6 +1,6 @@
 {
   "name": "shortstop",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Enable use of protocols (such as file:, buffer:, or method:) in configuration files.",
   "main": "index.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "jshint": "~2.4.4"
   },
   "dependencies": {
-    "async": "^3.2.4",
-    "core-util-is": "~1.0.1"
+    "core-util-is": "~1.0.1",
+    "async": "~0.2.10"
   }
 }

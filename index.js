@@ -1,5 +1,5 @@
 /*───────────────────────────────────────────────────────────────────────────*\
-│  Copyright (C) 2023 PayPal                                                  │
+│  Copyright (C) 2014 eBay Software Foundation                                │
 │                                                                             │
 │hh ,'""`.                                                                    │
 │  / _  _ \  Licensed under the Apache License, Version 2.0 (the "License");  │
@@ -26,9 +26,7 @@ function isModule(file) {
     // require.resolve will locate a file without a known extension (e.g. txt)
     // and try to load it as javascript. That won't work for this case.
     var ext = path.extname(file);
-    // in order for this to work after deprecation of module.extensions
-    var extensions = {'.js': true, '.json': true, '.node': true}
-    return ext === '' || extensions.hasOwnProperty(ext);
+    return ext === '' || require.extensions.hasOwnProperty(ext);
 }
 
 
