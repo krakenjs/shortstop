@@ -229,7 +229,8 @@ test('shortstop', function (t) {
         expected = { foo: 'foo:foo', bar: false };
         resolver.resolve(expected, function  resolve(err, actual) {
             t.ok(err);
-            t.equal(err.message, 'fail');
+            t.equal(err.message, 'Error occured while resolving protocols in case data is of type object/array');
+            t.equal(err.cause.message, 'fail');
             t.notOk(actual);
             t.end();
         });
@@ -247,7 +248,9 @@ test('shortstop', function (t) {
         expected = { foo: 'test:foo', bar: false };
         resolver.resolve(expected, function  resolve(err, actual) {
             t.ok(err);
-            t.equal(err.message, 'fail');
+            t.equal(err.message, 'Error occured while resolving protocols in case data is of type object/array');
+            t.equal(err.cause.message, 'Error occured while resolving protocols in case data is of type string');
+            t.equal(err.cause.cause.message, 'fail');
             t.notOk(actual);
             t.end();
         });
