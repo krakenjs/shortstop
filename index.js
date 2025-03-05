@@ -47,7 +47,9 @@ exports.create = function create(parent) {
 
                 fs.readFile(file, 'utf8', function (err, data) {
                     if (err) {
-                        callback(err);
+                        callback(new Error(`Error occured while reading file: ${file}`, {
+                            cause: err
+                        }));
                         return;
                     }
 
