@@ -26,7 +26,7 @@ function isModule(file) {
     // require.resolve will locate a file without a known extension (e.g. txt)
     // and try to load it as javascript. That won't work for this case.
     var ext = path.extname(file);
-    return ext === '' || require.extensions.hasOwnProperty(ext);
+    return ext === '' || Object.prototype.hasOwnProperty.call(require.extensions, ext);
 }
 
 
@@ -45,7 +45,9 @@ exports.create = function create(parent) {
 
                 fs.readFile(file, 'utf8', function (err, data) {
                     if (err) {
-                        callback(err);
+                        callback(new Error(`Error occured while reading file ${file}`, {
+                            cause: err
+                        }));
                         return;
                     }
 
@@ -53,7 +55,9 @@ exports.create = function create(parent) {
                         data = JSON.parse(data);
                         resolve(data, file, callback);
                     } catch (err) {
-                        callback(err);
+                        callback(new Error(`Error occured while parsing JSON data for file ${file}`, {
+                            cause: err
+                        }));
                     }
                 });
             }
